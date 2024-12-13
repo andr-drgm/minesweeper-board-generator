@@ -10,14 +10,20 @@ class TablesController < ApplicationController
       @table.update(board_data: generate_board(@table.width, @table.height, @table.mines))
       redirect_to table_path(@table), notice: "Board created successfully!"
     else
-      flash.now[:alert] = "Failed to create board. Please try again."
+      flash[:alert] = @table.errors.full_messages
       @latest_boards = Table.order(created_at: :desc).limit(10)
-      render "home/index"
+      redirect_to root_path
     end
   end
 
   def show
     @table = Table.find(params[:id])
+  end
+
+  def destroy
+    @table = Table.find(params[:id])
+    @table.destroy
+    redirect_to root_path, notice: "Board was successfully deleted."
   end
 
   private

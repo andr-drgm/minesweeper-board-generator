@@ -1,5 +1,18 @@
 .container.mx-auto.px-4.py-8
   %h1.text-3xl.font-bold.text-center.mb-8 Minesweeper Board Generator
+  - if notice.present?
+    .mb-4
+      .bg-green-100.border-l-4.border-green-500.text-green-700.p-4.mb-2
+        = notice
+  - if flash[:alert].present?
+    .mb-4
+      - if flash[:alert].is_a?(String)
+        .bg-red-100.border-l-4.border-red-500.text-red-700.p-4.mb-2
+          = flash[:alert]
+      - else
+        - flash[:alert].each do |error|
+          .bg-red-100.border-l-4.border-red-500.text-red-700.p-4.mb-2
+            = error
   .max-w-md.mx-auto.bg-white.shadow-md.rounded-lg.p-6
     %h2.text-2xl.font-semibold.mb-4 Create a New Board
     = form_with model: @table, url: tables_path, method: :post, local: true, class: "space-y-4" do |f|
@@ -19,7 +32,7 @@
         = f.label :mines, "Number of Mines", class: "block text-sm font-medium text-gray-700"
         = f.number_field :mines, required: true, min: 1, class: "mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
       %div
-        = f.submit "Create Board", class: "w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600"
+        = f.submit "Generate Board", class: "w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 hover:cursor-pointer"
   .mt-8
     %h2.text-2xl.font-semibold.mb-4 Latest Boards
     - if @latest_boards.any?
