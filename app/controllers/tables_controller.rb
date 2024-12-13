@@ -11,7 +11,7 @@ class TablesController < ApplicationController
       redirect_to table_path(@table), notice: "Board created successfully!"
     else
       flash[:alert] = @table.errors.full_messages
-      @latest_boards = Table.order(created_at: :desc).limit(10)
+      @tables = Table.order(created_at: :desc).limit(10)
       redirect_to root_path
     end
   end
@@ -35,11 +35,18 @@ class TablesController < ApplicationController
   def generate_board(width, height, mines)
     board = Array.new(height) { Array.new(width, 0) }
 
-    mine_positions = (0...width * height).to_a.sample(mines)
+    mine_positions = []
+    (0...height).each do |row|
+      (0...width).each do |col|
+        mine_positions << [row, col]
+      end
+    end
+
+    mine_positions = mine_positions.sample(mines)
 
     mine_positions.each do |position|
-      row = position / width
-      col = position % width
+      row = position[0]
+      col = position[1]
       board[row][col] = 1
     end
 

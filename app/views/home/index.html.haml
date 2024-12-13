@@ -13,50 +13,9 @@
         - flash[:alert].each do |error|
           .bg-red-100.border-l-4.border-red-500.text-red-700.p-4.mb-2
             = error
-  .max-w-md.mx-auto.bg-white.shadow-md.rounded-lg.p-6
-    %h2.text-2xl.font-semibold.mb-4 Create a New Board
-    = form_with model: @table, url: tables_path, method: :post, local: true, class: "space-y-4" do |f|
-      %div
-        = f.label :email, "Email", class: "block text-sm font-medium text-gray-700"
-        = f.email_field :email, required: true, class: "mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-      %div
-        = f.label :title, "Board Title", class: "block text-sm font-medium text-gray-700"
-        = f.text_field :title, required: true, class: "mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-      %div
-        = f.label :width, "Width", class: "block text-sm font-medium text-gray-700"
-        = f.number_field :width, required: true, min: 1, class: "mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-      %div
-        = f.label :height, "Height", class: "block text-sm font-medium text-gray-700"
-        = f.number_field :height, required: true, min: 1, class: "mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-      %div
-        = f.label :mines, "Number of Mines", class: "block text-sm font-medium text-gray-700"
-        = f.number_field :mines, required: true, min: 1, class: "mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-      %div
-        = f.submit "Generate Board", class: "w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 hover:cursor-pointer"
+  = render "tables/create_form"
   .mt-8
     %h2.text-2xl.font-semibold.mb-4 Latest Boards
-    - if @latest_boards.any?
-      %ul.space-y-4
-        - @latest_boards.each do |board|
-          %li.block.bg-white.shadow-md.rounded-lg.p-4.hover:bg-blue-50.hover:shadow-lg.transition-all.duration-200
-            = link_to table_path(board) do
-              %p
-                %strong Title:
-                = board.title
-              %p
-                %strong Email:
-                = board.email
-              %p
-                %strong Size:
-                = board.width
-                x #{board.height}
-              %p
-                %strong Mines:
-                = board.mines
-              %p
-                %strong Created At:
-                = board.created_at.strftime("%B %d, %Y %I:%M %p")
-    - else
-      %p.text-gray-600 No boards created yet!
+    = render "tables/boards_list"
     .mt-6.text-center
       = link_to "View All Boards", tables_path, class: "inline-block bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-200"

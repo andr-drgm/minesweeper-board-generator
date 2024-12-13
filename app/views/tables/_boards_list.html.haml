@@ -1,0 +1,24 @@
+- if @tables.any?
+    %ul.space-y-4
+    - @tables.each do |board|
+        = link_to table_path(board) do
+            %li.block.bg-white.shadow-md.rounded-lg.p-4.hover:bg-blue-50.hover:shadow-lg.transition-all.duration-200
+
+                %p
+                    %strong Title:
+                    = board.title
+                %p
+                    %strong Email:
+                    = board.email
+                %p
+                    %strong Size:
+                    = board.width
+                    x #{board.height}
+                %p
+                    %strong Mines:
+                    = board.mines
+                %p
+                    %strong Created At:
+                    = board.created_at.strftime("%B %d, %Y %I:%M %p")
+- else
+    %p.text-gray-600 No boards created yet!
