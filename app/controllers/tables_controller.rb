@@ -7,7 +7,7 @@ class TablesController < ApplicationController
     @table = Table.new(table_params)
 
     if @table.save
-      @table.update(board_data: generate_board(@table.width, @table.height, @table.mines))
+      @table.update(board_data: BoardGeneratorService.generate(@table.width, @table.height, @table.mines))
       redirect_to table_path(@table), notice: "Board created successfully!"
     else
       flash[:alert] = @table.errors.full_messages
@@ -30,26 +30,5 @@ class TablesController < ApplicationController
 
   def table_params
     params.require(:table).permit(:email, :title, :width, :height, :mines)
-  end
-
-  def generate_board(width, height, mines)
-    board = Array.new(height) { Array.new(width, 0) }
-
-    mine_positions = []
-    (0...height).each do |row|
-      (0...width).each do |col|
-        mine_positions << [row, col]
-      end
-    end
-
-    mine_positions = mine_positions.sample(mines)
-
-    mine_positions.each do |position|
-      row = position[0]
-      col = position[1]
-      board[row][col] = 1
-    end
-
-    board.to_json
   end
 end
