@@ -1,5 +1,11 @@
 class BoardGeneratorService
+
+  class GenerationError < StandardError; end
+
   def self.generate(width, height, mines)
+    raise GenerationError, "Invalid dimensions" if width <= 0 || height <= 0
+    raise GenerationError, "Invalid number of mines" if mines <= 0 || mines >= (width * height)
+
     board = Array.new(height) { Array.new(width, 0) }
 
     mine_positions = []

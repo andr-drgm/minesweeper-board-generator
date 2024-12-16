@@ -1,4 +1,6 @@
 class TablesController < ApplicationController
+  rescue_from BoardGeneratorService::GenerationError, with: :handle_generation_error
+
   def index
     @tables = Table.all
   end
@@ -7,11 +9,9 @@ class TablesController < ApplicationController
     @table = Table.new(table_params)
 
     if @table.save
-      @table.update(board_data: BoardGeneratorService.generate(@table.width, @table.height, @table.mines))
       redirect_to table_path(@table), notice: "Board created successfully!"
     else
       flash[:alert] = @table.errors.full_messages
-      @tables = Table.order(created_at: :desc).limit(10)
       redirect_to root_path
     end
   end
@@ -27,6 +27,11 @@ class TablesController < ApplicationController
   end
 
   private
+
+  def handle_generation_error(error)
+    flash[:alert] = "Error generating board: #{error.message}"
+    redirect_to root_path
+  end
 
   def table_params
     params.require(:table).permit(:email, :title, :width, :height, :mines)
